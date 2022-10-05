@@ -6,29 +6,26 @@ using UnityEngine.UI;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    public SpawnMobs spawnMobs;
-    public Transform player;
+    GameObject player;
     public Image healthBar;
-    float moveSpeed = 2.0f;
     float healthPoints;
+    float moveSpeed = 5.0f;
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         healthPoints = 3;
-       
     }
 
     void Update()
     {
-        //Follow Player
-        transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
-
-        //Hit Points
         if (healthPoints <= 0)
         {
             Destroy(gameObject);
-            spawnMobs.enemyCount--;
         }
+
+        Vector2 moveDir = player.transform.position - transform.position;
+        transform.Translate(moveDir.normalized * moveSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

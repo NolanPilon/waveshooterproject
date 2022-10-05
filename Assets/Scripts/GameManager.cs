@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
-public class SpawnMobs : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    public PlayerController controller;
     public Transform player;
     public GameObject enemy;
     public int enemyCount = 0;
@@ -20,14 +20,23 @@ public class SpawnMobs : MonoBehaviour
         spawnPositions[1] = new Vector2(30, 0);
         spawnPositions[2] = new Vector2(0, -20);
         spawnPositions[3] = new Vector2(0, 20);
+
+        SpawnEnemy();
+        enemyCount = 1;
     }
     void Update()
     {
+        //Spawn Behavior
+        if (controller.enemies.Length > 0) 
+        {
+            enemyCount = controller.enemies.Length;
+        }
+
         if (enemyCount < maxEnemies)
         {
             if (!IsInvoking("SpawnEnemy"))
             {
-                InvokeRepeating("SpawnEnemy", 0.0f, enemySpawnRate);
+                InvokeRepeating("SpawnEnemy", enemySpawnRate, enemySpawnRate);
             }
         }
         else
@@ -36,7 +45,7 @@ public class SpawnMobs : MonoBehaviour
         }
     }
 
-    void SpawnEnemy() 
+    void SpawnEnemy()
     {
         Vector2 playerPos = player.position;
         int i = Random.Range(0, 3);
@@ -44,6 +53,5 @@ public class SpawnMobs : MonoBehaviour
         Vector2 spawnPos = playerPos + spawnPositions[i];
 
         Instantiate(enemy, spawnPos, Quaternion.identity);
-        enemyCount++;
     }
 }

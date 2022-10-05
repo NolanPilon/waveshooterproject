@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameManager gameManager;
+
     float moveSpeed = 10.0f;
     float fireRate = 0.75f;
     float bulletVelocity = 10.0f;
@@ -30,11 +32,8 @@ public class PlayerController : MonoBehaviour
 
         FindClosestEnemy();
 
-        //Use First Enemy as Dummy Instance
-        enemies[0].transform.position = new Vector2(-20, 20);
-
         // Shoot When Close To Target
-        if (Vector2.Distance(closestEnemy.transform.position, playerPos) < shootDist)
+        if (gameManager.enemyCount > 0 && Vector2.Distance(closestEnemy.transform.position, playerPos) < shootDist)
         {
             if (!IsInvoking("Shoot"))
             {
@@ -60,17 +59,21 @@ public class PlayerController : MonoBehaviour
     void FindClosestEnemy()
     {
         float lastDistance = Mathf.Infinity;
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-    
-        foreach (GameObject currentEnemy in enemies)
+
+        if (gameManager.enemyCount != 0) 
         {
-            float disToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
-            if (disToEnemy < lastDistance)
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+            foreach (GameObject currentEnemy in enemies)
             {
-                lastDistance = disToEnemy;
-                closestEnemy = currentEnemy;
+                float disToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+                if (disToEnemy < lastDistance)
+                {
+                    lastDistance = disToEnemy;
+                    closestEnemy = currentEnemy;
+                }
             }
+            Debug.DrawLine(transform.position, closestEnemy.transform.position);
         }
-        Debug.DrawLine(transform.position, closestEnemy.transform.position);
     }
 }
