@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Bullet
+  - ItemSlot
+  - RedPot
+  - BluePot
   layers:
   - Default
   - TransparentFX
