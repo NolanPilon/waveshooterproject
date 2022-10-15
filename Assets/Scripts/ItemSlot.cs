@@ -7,12 +7,16 @@ public class ItemSlot : MonoBehaviour
 {
     public ItemDisplayObject itemManager;
     public int currentItem;
+    public int stackSize;
+    public bool hasItem;
+    private int maxStackSize = 16;
     public bool slotFull;
     Image slotSprite;
 
     private void Start()
     {
         slotFull = false;
+        hasItem = false;
         currentItem = 1000;
         slotSprite = GetComponent<Image>();
     }
@@ -22,12 +26,19 @@ public class ItemSlot : MonoBehaviour
         //Display Items
         switch (currentItem) 
         {
-            case 0:
-                slotSprite.sprite = itemManager.sprites[(int)ItemManager.ITEM_ID.RED_POTION];
+            case (int)ItemManager.ITEM_ID.WOOD:
+                slotSprite.sprite = itemManager.sprites[(int)ItemManager.ITEM_ID.WOOD];
                 break;
-            case 1:
-                slotSprite.sprite = itemManager.sprites[(int)ItemManager.ITEM_ID.BLUE_POTION];
+            case (int)ItemManager.ITEM_ID.BOW:
+                slotSprite.sprite = itemManager.sprites[(int)ItemManager.ITEM_ID.BOW];
                 break;
         }
+
+        //Stackable Items
+        if (stackSize == maxStackSize) 
+        {
+            slotFull = true;
+        }
     }
+
 }

@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,33 +9,33 @@ public class ItemManager : MonoBehaviour
     public ItemSlot[] slotInformation;
     public enum ITEM_ID
     {
-        RED_POTION = 0,
-        BLUE_POTION,
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //Check Ground Item Tag
-        switch (collision.tag) 
-        {
-            case "RedPot":
-                pickupItem(collision, (int)ITEM_ID.RED_POTION);
-                break;
-            case "BluePot":
-                pickupItem(collision, (int)ITEM_ID.BLUE_POTION);
-                break;
-        } 
+        WOOD = 0,
+        BOW
     }
 
-    //Pickup Ground Items
-    void pickupItem(Collider2D groundItem, int itemID) 
+
+    public void pickupWood() 
     {
-        for (int i = 0; i < slotInformation.Length; i++)
+        for (int i = 0; i < slotInformation.Length; i++) 
         {
             if (!slotInformation[i].slotFull)
             {
+                slotInformation[i].currentItem = 0;
+                slotInformation[i].hasItem = true;
+                slotInformation[i].stackSize++;
+                return;
+            }
+        } 
+    }
+    public void pickupBow()
+    {
+        for (int i = 0; i < slotInformation.Length; i++)
+        {
+            if (!slotInformation[i].slotFull && !slotInformation[i].hasItem)
+            {
+                slotInformation[i].currentItem = 1;
                 slotInformation[i].slotFull = true;
-                slotInformation[i].currentItem = itemID;
-                Destroy(groundItem.gameObject);
+                slotInformation[i].hasItem = true;
                 return;
             }
         }

@@ -7,8 +7,10 @@ TagManager:
   - Enemy
   - Bullet
   - ItemSlot
-  - RedPot
+  - Sword
   - BluePot
+  - RedPot
+  - Bow
   layers:
   - Default
   - TransparentFX
